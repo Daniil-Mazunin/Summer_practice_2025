@@ -25,7 +25,7 @@ class Program
             }
         }
 
-        int[] threadsCount = { 2, 4, 6, 8, 10 };
+        int[] threadsCount = { 1, 2, 4, 6, 8, 10 };
         int iterations = 10;
         double[] times = new double[threadsCount.Length];
 
