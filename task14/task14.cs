@@ -6,13 +6,11 @@ public class DefiniteIntegral
 {
     public static double Solve(double a, double b, Func<double, double> function, double step, int threadsnumber)
     {
-        double result = 0.0;
+        double[] results = new double[threadsnumber];
+
         double lenght = (b - a) / threadsnumber;
 
-        var barrier = new Barrier(threadsnumber + 1);
-        object locker = new object();
-
-        for (int i = 0; i < threadsnumber; i++)
+        Parallel.For(0, threadsnumber, i =>
         {
             double start = a + i * lenght;
             double end;
@@ -24,19 +22,11 @@ public class DefiniteIntegral
             {
                 end = start + lenght;
             }
-            var thread = new Thread(() =>
-            {
-                lock (locker)
-                {
-                    result += TrapezoidMethod(start, end, function, step);
-                }
-                barrier.SignalAndWait();
-            });
-            thread.Start();
-        }
-        barrier.SignalAndWait();
 
-        return result;
+            results[i] = TrapezoidMethod(start, end, function, step);
+        });
+
+        return results.Sum();
     }
     public static double TrapezoidMethod(double a, double b, Func<double, double> function, double step)
     {
