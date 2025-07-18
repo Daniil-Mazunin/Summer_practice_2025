@@ -1,4 +1,4 @@
-﻿using task18;
+﻿﻿using task18;
 using CommandLib;
 using System.Diagnostics;
 
@@ -24,9 +24,9 @@ public class TestCommand : ICommand
         {
             stopwatch.Start();
         }
-        Console.WriteLine($"Поток {Id} вызов {++Counter}");
         if (Counter < MaxCount)
         {
+            Console.WriteLine($"Поток {Id} вызов {++Counter}");
             Scheduler.Add(this);
         }
         else
