@@ -1,5 +1,6 @@
 ﻿using task18;
 using CommandLib;
+using System.Diagnostics;
 
 namespace task19;
 
@@ -9,6 +10,8 @@ public class TestCommand : ICommand
     private int Id;
     private int MaxCount;
     private IScheduler Scheduler;
+    private Stopwatch stopwatch = new Stopwatch();
+    public long ElapsedMs => stopwatch.ElapsedMilliseconds;
     public TestCommand(IScheduler scheduler, int id, int maxCount)
     {
         Scheduler = scheduler;
@@ -17,13 +20,18 @@ public class TestCommand : ICommand
     }
     public void Execute()
     {
+        if (Counter == 0)
+        {
+            stopwatch.Start();
+        }
+        Console.WriteLine($"Поток {Id} вызов {++Counter}");
         if (Counter < MaxCount)
         {
-            Console.WriteLine($"Поток {Id} вызов {++Counter}");
-            if (Counter < MaxCount)
-            {
-                Scheduler.Add(this);
-            }
+            Scheduler.Add(this);
+        }
+        else
+        {
+            stopwatch.Stop();
         }
     }
 }
